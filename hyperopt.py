@@ -2,39 +2,28 @@ from skopt import gp_minimize
 from functools import partial
 
 x_lst = []
-y_lst = []
 score_lst = []
 
-model_lst = []
-batch_lst = []
-
-model = "bert-base-case"
-batch = 16
 
 #in ORDER [(learning rate),[epochs]]
-space = [(0.00001, 0.001), 
-         (2, 5)] 
+space = [(-5,4)] 
 
 def my_function(*args):
     x = args[0][0]
-    y = args[0][1]
     global final
-    final = (x - 2)**2 + (y - 3)**2
+    final = (x**4)+(3*x**3)-(9*x**2)-23*x-12
     
-    return -final
+    return final
 
 def print_result(params):
     
 
     x_lst.append(params.x_iters[-1][0])
-    y_lst.append(params.x_iters[-1][1])
     score_lst.append(params.func_vals[-1])
     
-    model_lst.append(model)
-    batch_lst.append(batch)
 
 
-res = gp_minimize(my_function, space, n_calls=3, 
+res = gp_minimize(my_function, space, n_calls=10, 
                   random_state=0, callback=print_result,
                  verbose = True)
 
